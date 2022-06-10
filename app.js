@@ -2,14 +2,13 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require("cors");
 const app = express()
-const port = 3000
-const socketPort = 8000;
+const PORT = process.env.PORT || 8000;
 const db = require('./queries')
 const { emit } = require("process");
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
     cors: {
-        origin: "http://localhost:3001",
+        origin: "*",
         methods: ["GET", "POST"],
     },
 });
@@ -24,19 +23,14 @@ app.use(
     })
 )
 
-app.listen(port, () => {
-    console.log(`App running on ${port}.`)
-})
+// CRUD Stuff
 
 app.get("/messages", db.getMessages);
 app.post("/messages", db.createMessage);
 
-app.get('/', (request, response) => {
-    response.json({ info: 'Our app is up and running' })
-})
-
 
 // Socket Stuff
+
 // sends out the 10 most recent messages from recent to old
 const emitMostRecentMessges = () => {
     db.getSocketMessages().then((result) => io.emit("chat message", result)).catch(console.log);
@@ -59,6 +53,7 @@ io.on("connection", (socket) => {
 });
 
 // Displays in terminal which port the socketPort is running on
-server.listen(socketPort, () => {
-    console.log(`listening on *:${socketPort}`);
+server.listen(PORT, () => {
+    console.log(`listening on *:${PORT}`);
 });
+
