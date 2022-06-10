@@ -56,13 +56,13 @@
     <ul id="messages"></ul>
     <form action="">
         <input id="username" autocomplete="off" placeholder="username" />
-        <input id="m" autocomplete="off" placeholder="equation" />
+        <input id="m" autocomplete="off" placeholder="message" />
         <button>Send</button>
     </form>
-    <script src="http://localhost:8000/socket.io/socket.io.js">
+    <script src="https://chat-app-self-hosted.herokuapp.com/socket.io/socket.io.js">
     </script>
     <script>
-        const socket = io("http://localhost:8000");
+        const socket = io("https://chat-app-self-hosted.herokuapp.com");
         const form = document.querySelector('form');
         const messages = document.querySelector('#messages');
         function createMessage(msg) {
@@ -74,7 +74,7 @@
             msgs.forEach(createMessage);
         }
 
-        fetch("http://localhost:3000/messages")
+        fetch("https://chat-app-self-hosted.herokuapp.com/messages")
             .then(res => res.json())
             .then(createMessages);
 
